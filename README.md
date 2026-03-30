@@ -1,59 +1,61 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# ServiceHub - Gestão de Tickets Corporativos
 
-## About Laravel
+O **ServiceHub** é uma solução enterprise para gerenciamento de chamados técnicos e triagem de dados, desenvolvida com foco em performance, escalabilidade e experiência do usuário (UX). 
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Este projeto foi refatorado seguindo **boas práticas de engenharia de software**, com foco em arquitetura limpa e documentação integrada.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Novas Funcionalidades e Melhorias
 
-## Learning Laravel
+* **Documentação Interna:** Código comentado e estruturado para facilitar a manutenção pela equipe técnica.
+* **Processamento Assíncrono:** Implementação de **Jobs** e **Queues** para processamento de anexos em segundo plano.
+* **Localização Completa:** Validações e mensagens de sistema padronizadas.
+* **Fluxo de Autenticação Inteligente:** Redirecionamento automático baseado no status do usuário (Login/Dashboard).
+* **Automação de Ambiente:** Seeders avançados que reconstroem o banco de dados com empresas e projetos reais.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+##  Pré-requisitos de Ambiente (XAMPP)
 
-## Laravel Sponsors
+Para que o **ServiceHub** funcione corretamente no Windows, é necessário garantir que os serviços de servidor e banco de dados estejam ativos:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+1. **XAMPP Control Panel:**
+   - Inicie o **Apache** (Servidor Web).
+   - Inicie o **MySQL** (Banco de Dados).
+   
+2. **Configuração do Banco:**
+   - Certifique-se de que você criou um banco de dados vazio no seu MySQL (via phpMyAdmin ou terminal) com o nome definido no seu arquivo `.env` (ex: `servicehub`).
 
-### Premium Partners
+3. **Execução Simultânea (Obrigatório):**
+   Para a experiência completa (Frontend reativo + Filas assíncronas), você deve manter **três instâncias do terminal** abertas na pasta do projeto:
+   - `php artisan serve` (Backend)
+   - `npm run dev` (Frontend/Vite)
+   - `php artisan queue:listen` (Processador de Tickets)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
 
-## Contributing
+## Guia de Execução 
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Siga estes passos:
 
-## Code of Conduct
+### 1. Preparação do Ambiente
+BASH
+composer install
+npm install
+php artisan key:generate
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 2. Reset e Automação do Banco
+Este comando limpa o banco e recria o perfil do Administrador, empresas e projetos automaticamente:
 
-## Security Vulnerabilities
+Bash
+php artisan migrate:fresh --seed
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 3. Execução em Desenvolvimento
+Mantenha os processos ativos para garantir o funcionamento do Vue 3 e das Filas:
 
-## License
+Aplicação: php artisan serve
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Vite (Frontend): npm run dev
+
+Worker (Processamento): php artisan queue:listen

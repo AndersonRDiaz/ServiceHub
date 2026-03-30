@@ -2,56 +2,50 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
+
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    // Essencial para segurança, evitando que campos sensíveis sejam alterados via formulário
     protected $fillable = [
         'name',
         'email',
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
+    // Atributos que devem ser ocultados em respostas JSON/Array
+    // Garante que dados sensíveis como senhas não vazem para o Frontend
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+    // Casts de atributos para tipos nativos do PHP
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password' => 'hashed', 
         ];
     }
     
-    /**
-     * Relacionamento 1:1 com UserProfile
-     */
-    public function profile()
+    // Perfil adicional do usuário (1:1)
+    public function profile(): HasOne
     {
         return $this->hasOne(UserProfile::class);
+    }
+
+    // Tickets criados pelo usuário (1:N)
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class);
     }
 }

@@ -12,9 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ticket_details', function (Blueprint $table) {
-            $table->foreignId('ticket_id')->unique()->constrained();
-            $table->timestamps();
-        });
+        $table->id(); 
+        $table->foreignId('ticket_id')->unique()->constrained()->onDelete('cascade');
+        $table->text('content');          // Armazena o texto bruto do anexo
+        $table->json('metadata')->nullable(); // Armazena dados extras processados
+        
+        $table->timestamps();
+    });
     }
 
     /**

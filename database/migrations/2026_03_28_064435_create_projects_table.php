@@ -16,6 +16,7 @@ return new class extends Migration
             // Use exatamente esta linha para a chave estrangeira:
             $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
             $table->string('name');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
